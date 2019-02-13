@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Inputs>
+  <Lists>
+  <!--XML Schema for Creating Lists and Adding Associated Content type to the List/Library-->
+
+  <!--Template:DocumentLibrary for creating a Document Library-->
+    <List Title="LibraryName" URL="LibraryName" Template="DocumentLibrary"> 
+      <SiteContentTypes>
+      <!--Adding this Content Type to this Library/List-->
+        <ContentType Name="SampleContentType"> 
+        </ContentType>
+      </SiteContentTypes>
+    </List>
+<!--Template:GenericList for creating a Custom List-->
+    <List Title="SampleCustomList" URL="Lists/SampleCustomList" Template="GenericList">
+      <!--Adding Site Column to List directly-->
+      <Fields>
+        <Field Name="SampleTextColumn"/> <!--Provide Internal Name of the field-->
+      </Fields>
+    </List>
+  </Lists>
+  <!--Creating Various site columns through xml and PNP Powershell-->
+  <SiteColumns>
+    <Field Type="Lookup"
+           Name="SubTheme"
+           DisplayName="Sub Theme"
+           StaticName="SubTheme"
+           List="SubThemes"
+           WebId=""
+           SourceID="{}"
+           ShowField="Name of the Source Field whose values are to be used as LookUp"
+           Required="FALSE"
+           UnlimitedLengthInDocumentLibrary="FALSE"
+           EnforceUniqueValues="FALSE"
+           Group="Sample Group(Used for Easy Identification while checking or selecting of columns manually)(optional)"
+		   Mult="TRUE"
+		   /> <!--LookUp Field Site Colum Creation--> <!--WebId and SourceID will be dynamically mapped through pwoershell according to your List/Site--> <!-- Use Mult=True if your look up is multi lookup-->
+
+<!--Dropdown field xml schema-->
+    <Field Type="Choice"  Name="SampleChoice" StaticName="SampleChoice" DisplayName="SampleChoice" Group="Sample Group"> 
+      <Default>Choice 1</Default>
+      <CHOICES>
+        <CHOICE>Choice 1</CHOICE>
+        <CHOICE>Choice 2</CHOICE>
+        <CHOICE>Choice 3</CHOICE>
+        <CHOICE>Choice 4</CHOICE>
+        <CHOICE>Choice 5</CHOICE>
+      </CHOICES>
+    </Field>
+<!--Radio Button field xml schema-->
+    <Field Type="Choice" Format="RadioButtons" Name="RadioField" StaticName="RadioField" DisplayName="RadioField" Group="Sample Group"> 
+      <Default></Default>
+      <CHOICES>
+        <CHOICE>R1</CHOICE>
+        <CHOICE>R2</CHOICE>
+        <CHOICE>R3</CHOICE>
+      </CHOICES>
+    </Field>
+
+<!--Taxonomy Field/Managed Metadata Field-->
+    <Field Type="TaxonomyFieldType"  Name="SampleMetadata" DisplayName="SampleMetadata" StaticName="SampleMetadata" WebId=""
+    SourceID="{}" Required="FALSE" EnforceUniqueValues="FALSE"  ShowField="Term1033" Group="Sample Group">
+      <Customization>
+        <ArrayOfProperty>
+          <Property>
+            <Name>SspId</Name>
+            <Value xmlns:q1="http://www.w3.org/2001/XMLSchema" p4:type="q1:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance"><Provide TermStore GUID></Value>
+          </Property>
+	<Property><Name>GroupId</Name></Property>
+          <Property>
+            <Name>TermSetId</Name>
+            <Value xmlns:q2="http://www.w3.org/2001/XMLSchema" p4:type="q2:string" xmlns:p4="http://www.w3.org/2001/XMLSchema-instance"><Provide Termset GUID></Value>
+          </Property>
+        </ArrayOfProperty>
+      </Customization>
+    </Field>
+
+<!--Single Line of Text Field-->
+
+    <Field  Type="Text" DisplayName="Sample Single Line" Required="FALSE" EnforceUniqueValues="FALSE" Name="SampleSingleLine" StaticName="SampleSingleLine" Group="Smaple Group"/>
+
+<!--Person/Group Field-->
+    <Field Type="User" DisplayName="Sample User" Required="FALSE" EnforceUniqueValues="FALSE" Name="SampleUser" StaticName="SampleUser" UserSelectionScope="0" UserSelectionMode="PeopleOnly" Group="Sample Group"/>
+    <!--Image Field-->
+    <Field Type="URL" DisplayName="Sample Image" Required="FALSE" EnforceUniqueValues="FALSE" Name="SampleImage" StaticName="SampleImage" Group="Sample Group"/>
+<!--Hyperlink Field-->
+    <Field Type="URL" DisplayName="Sample URL" Format="Hyperlink" Required="FALSE" EnforceUniqueValues="FALSE" StaticName="SampleURL" Name="SampleURL" Group="Sample Group"/>
+    <!--Numeric Field-->
+    <Field Type="Number" DisplayName="Rating" Required="FALSE" EnforceUniqueValues="FALSE" Name="Rating" StaticName="Rating" Group="Sample Group"/>
+     <!--DateTime Field-->
+    <Field Type="DateTime" DisplayName="Sample Date" Required="FALSE" EnforceUniqueValues="FALSE" Name="SampleDate" StaticName="SampleDate" Format="DateOnly" Group="Sample Group"/> <!--Use DateOnly if you want only Date--> <!--Use DateTime if you want both Date and Time -->
+    <!--Boolean Field-->
+    <Field Type="Boolean" DisplayName="Sample Bool" Required="TRUE" EnforceUniqueValues="FALSE" Name="SampleBool" StaticName="SampleBool" Group="Sample Group"/>
+    <!--Multi Line of text Field-->
+    <Field Type="Note" DisplayName="Sample Multi line" Required="TRUE" EnforceUniqueValues="FALSE" Name="SampleMultiline" StaticName="SampleMultiline" Group="Sample Group"/>
+    <!--DateTime Field with a calculated value-->
+	<Field Type="DateTime" DisplayName="calculated value" Required="True" EnforceUniqueValues="FALSE" Name="calculated value" StaticName="calculated value" Format="DateOnly" Group="Sample Group">
+	<DefaultFormula>=DATE(YEAR(Today)+2,MONTH(Today),DAY(Today))</DefaultFormula>
+	</Field><!--In this case the date field will calculate 2 years with current year and display the value-->
+  </SiteColumns>
+ <!--Creating Various site Content Types through xml and PNP Powershell-->
+  <ContentTypes>
+    <ContentType Type="Parent" Name="Sample Parent" Group="Sample Content Groups" Description="Description of Content Type" Parent="Enter the Content From which this content type will inherit columns eg.Item/Document" > <!--This is a parent content type-->
+      <Fields>
+        <Field Name="Enter the Internal Name of the Field to be added to this content type">
+        </Field>
+      </Fields>
+    </ContentType>
+
+    <ContentType Type="Child" Name="Internal Case Study" Group="AxiataContentTypes" Description="Axiata Case Study" Parent="Sample Parent" ><!--This is a child content type-->
+      <Fields>
+        <Field Name="Enter the Internal Name of the Field to be added to this content type">
+        </Field>
+      </Fields>
+    </ContentType>
+  </ContentTypes>
+
+<!--Create Folders and Subfolders in List/Library Name--> 
+<!--Please Make sure the Settings to create folder is enabled in List and Library-->
+
+  <Folders>
+  <Folder Name="Main Folder Name" Library="Provide List/Library URL"> <!--Eg. Lists/ListName in case of List Name or DocumentLibraryName incase of Library Name -->
+  </Folder>
+  <Folder Name="Main Folder Name" Library="Provide List/Library URL">
+  <SubFolders name="Sub Folder Name" Folder="Main Folder Name"></SubFolders>
+  </Folder>
+  </Folders>
+
+  <!--Create publishing Pages in site--> 
+  <Pages>
+<Page Name="PageName" Layout="URL/Name of the Layout to be given for the page" Title="Title of the Layout" Location="/Pages">
+</Page>
+</Pages>
+
+<!--Create Groups and adding users to the group-->
+
+<Groups>
+<Group Name="Group Name" Description="Group Description" Owner="Group owners" PermissionLevel="Permission Level Name for this Group">
+<User Group ="Group Name" Email="User Email"></User>
+</Group>
+</Groups>
+  </Inputs>
